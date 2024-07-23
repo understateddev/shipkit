@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import { shipkit } from '../src';
+import { start } from '../src';
 
 (async () => {
-  shipkit();
+  await start();
 })();
