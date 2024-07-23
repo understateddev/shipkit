@@ -1,3 +1,3 @@
 export const shipkit = () => {
-  console.log('ShipKit');
+  console.log('shipkit 0.0.2');
 };
