@@ -32,7 +32,7 @@ jobs:
         id: pnpm-install
         uses: pnpm/action-setup@v2
         with:
-          version: 9.x.x
+          version: 9.6.0
           run_install: false
 
       - name: Install
