@@ -1,5 +1,11 @@
 # shipkit
 
+## 0.0.7
+
+### Patch Changes
+
+- b628c3f: Stored token
+
 ## 0.0.6
 
 ### Patch Changes
