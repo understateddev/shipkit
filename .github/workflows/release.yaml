@@ -32,11 +32,11 @@ jobs:
         id: pnpm-install
         uses: pnpm/action-setup@v2
         with:
-          version: 9.6.0
+          version: 9.x.x
           run_install: false
 
       - name: Install
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm build

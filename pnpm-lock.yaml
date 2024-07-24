@@ -35,9 +35,6 @@ importers:
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
-      shipkit:
-        specifier: ^0.0.2
-        version: 0.0.2
     devDependencies:
       '@changesets/cli':
         specifier: ^2.27.7
@@ -1309,9 +1306,6 @@ packages:
   shebang-regex@3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
-
-  shipkit@0.0.2:
-    resolution: {integrity: sha512-T3Nxa5s/r2s5Y0IZdj6Fpt8a0VouK1abfDlPDFcpx1vZiMCptxmO0H70DmcKspXFoAo2vIq/jl46o/HjMRIxZg==}
 
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
@@ -2720,12 +2714,6 @@ snapshots:
   shebang-regex@1.0.0: {}
 
   shebang-regex@3.0.0: {}
-
-  shipkit@0.0.2:
-    dependencies:
-      axios: 1.6.2
-    transitivePeerDependencies:
-      - debug
 
   signal-exit@3.0.7: {}
 
