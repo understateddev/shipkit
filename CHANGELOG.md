@@ -1,5 +1,11 @@
 # shipkit
 
+## 0.0.6
+
+### Patch Changes
+
+- f5ade05: Added ShipKit token
+
 ## 0.0.5
 
 ### Patch Changes
