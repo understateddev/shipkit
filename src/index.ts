@@ -1,14 +1,35 @@
-import { confirm, select } from '@inquirer/prompts';
+import { confirm, input, select } from '@inquirer/prompts';
 import axios from 'axios';
+import { color } from 'console-log-colors';
 import 'dotenv/config';
 import { createWriteStream } from 'fs-extra';
 import { exec } from 'node:child_process';
-import { deleteDir, deleteFile, unzipFile } from '~/file';
+import ora from 'ora';
+import { deleteDir, deleteFile, pathExists, unzipFile } from '~/file';
+import { exit } from '~/utils';
 
 const baseUrl = process.env.SHIPKIT_BASE_URL ?? 'https://shipkit.app';
+const outputDir = process.env.SHIPKIT_OUTPUT_DIR ?? '.';
 
 export const start = async () => {
+  welcome();
+
   try {
+    const name = await input({
+      message: "What's the name of your project?",
+      default: 'my-project',
+    });
+
+    const to = `${outputDir}/${name}`;
+    const toZip = `${to}.zip`;
+
+    if (pathExists(to)) {
+      console.log('');
+      console.log(color.redBright('Folder already exists'));
+
+      exit();
+    }
+
     const baseFramework = await select({
       message: 'Select a base framework',
       choices: [
@@ -105,20 +126,32 @@ export const start = async () => {
       auth,
     };
 
-    const url = `${baseUrl}/api/build`;
-    const to = '../temp-output-user/output';
-    const toZip = `${to}.zip`;
+    // dev
+    // const manager = 'bun';
+
+    // const choices = {
+    //   baseFramework,
+    //   framework: 'react',
+    //   orm: 'prisma',
+    //   database: 'mysql',
+    //   auth: 'lucia',
+    // };
+
+    const spinner = ora('Downloading kit...').start();
 
     await downloadFile({
-      url,
       token: '394965bd_cad7_4c47_af78_5ae9126f3333',
       data: choices,
       outputPath: toZip,
     });
 
     await deleteDir(to);
+    spinner.text = 'Extracting kit...';
     await unzipFile(toZip, to);
+    spinner.text = 'Cleaning kit...';
     await deleteFile(toZip);
+
+    spinner.stop();
 
     const shouldInstall = await confirm({ message: 'Install dependencies?' });
 
@@ -128,20 +161,22 @@ export const start = async () => {
         manager,
       });
     }
+
+    console.log('');
+    console.log(color.greenBright('Build something amazing!'));
   } catch (error: any) {}
 };
 
 async function downloadFile({
-  url,
   token,
   data,
   outputPath,
 }: {
-  url: string;
   token: string;
   data: unknown;
   outputPath: string;
 }): Promise<void> {
+  const url = `${baseUrl}/api/build`;
   const writer = createWriteStream(outputPath);
 
   const response = await axios({
@@ -177,16 +212,17 @@ export const install = async ({
   };
 
   return new Promise<void>((resolve, reject) => {
-    const child = exec(
-      `echo "Installing dependencies with ${manager}" && cd ${path} && ${managers[manager]}`,
-      (error) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve();
-        }
+    console.log('');
+    console.log(color.cyanBright(`Installing dependencies with ${manager}`));
+    console.log('');
+
+    const child = exec(`cd ${path} && ${managers[manager]}`, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
       }
-    );
+    });
 
     child.stdout?.on('data', (data) => {
       console.log(data);
@@ -197,3 +233,20 @@ export const install = async ({
     });
   });
 };
+
+export const welcome = () => {
+  console.log(color.gray('-------------------------'));
+  console.log(color.greenBright('Welcome to ShipKit!'));
+  // console.log('');
+  // console.log(color.gray('Get started:'));
+  // console.log('https://shipkit.app/docs');
+  console.log('');
+  // console.log(color.gray('-------------------------'));
+  console.log(color.gray('Created by: Marcel Thomas'));
+  console.log(color.gray('-------------------------'));
+  console.log('');
+};
+
+(async () => {
+  await start();
+})();

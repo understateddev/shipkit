@@ -1,6 +1,6 @@
 import AdmZip from 'adm-zip';
 import axios from 'axios';
-import { createWriteStream, readFileSync } from 'fs-extra';
+import { createWriteStream, existsSync, readFileSync } from 'fs-extra';
 import {
   cp,
   mkdir,
@@ -12,6 +12,10 @@ import https from 'https';
 import os from 'os';
 import path from 'path';
 import { rimraf } from 'rimraf';
+
+export const pathExists = (path: string) => {
+  return existsSync(path);
+};
 
 export const getTempFilePath = (file: string) => {
   const tempDir = os.tmpdir();
