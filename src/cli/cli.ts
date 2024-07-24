@@ -1,13 +1,14 @@
-import { confirm, input, select } from '@inquirer/prompts';
+import { confirm, input, password, select } from '@inquirer/prompts';
 import axios from 'axios';
 import { color } from 'console-log-colors';
 import 'dotenv/config';
 import { createWriteStream } from 'fs-extra';
 import { exec } from 'node:child_process';
+import { getApiUrl } from '~/api';
 import { deleteDir, deleteFile, pathExists, unzipFile } from '~/file';
+import { isValidToken } from '~/token';
 import { exit } from '~/utils';
 
-const baseUrl = process.env.SHIPKIT_BASE_URL ?? 'https://shipkit.app';
 const outputDir = process.env.SHIPKIT_OUTPUT_DIR ?? '.';
 
 export const cli = async () => {
@@ -16,6 +17,23 @@ export const cli = async () => {
   welcome();
 
   try {
+    const token = await password({
+      message: 'Enter your ShipKit token',
+    });
+
+    const tokenSpinner = ora('Checking token...').start();
+
+    const isValid = await isValidToken(token);
+
+    tokenSpinner.stop();
+
+    if (!isValid) {
+      console.log('');
+      console.log(color.redBright('Invalid token'));
+
+      exit();
+    }
+
     const name = await input({
       message: "What's the name of your project?",
       default: 'my-project',
@@ -141,7 +159,7 @@ export const cli = async () => {
     const spinner = ora('Downloading kit...').start();
 
     await downloadFile({
-      token: '394965bd_cad7_4c47_af78_5ae9126f3333',
+      token,
       data: choices,
       outputPath: toZip,
     });
@@ -177,9 +195,8 @@ async function downloadFile({
   data: unknown;
   outputPath: string;
 }): Promise<void> {
-  const url = `${baseUrl}/api/build`;
   const writer = createWriteStream(outputPath);
-
+  const url = getApiUrl('/api/build');
   const response = await axios({
     url,
     data,
