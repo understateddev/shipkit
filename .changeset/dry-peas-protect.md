@@ -1,5 +1,0 @@
----
-"shipkit": patch
----
-
-Stored token
