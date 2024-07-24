@@ -1,7 +1,6 @@
 import { confirm, input, select } from '@inquirer/prompts';
 import axios from 'axios';
 import { color } from 'console-log-colors';
-import 'dotenv/config';
 import { createWriteStream } from 'fs-extra';
 import { exec } from 'node:child_process';
 import { getApiUrl } from '~/api';
@@ -74,15 +73,35 @@ export const cli = async () => {
       ],
     });
 
-    const framework = await select({
-      message: 'Select a framework',
-      choices: [
-        {
-          name: 'React',
-          value: 'react',
-        },
-      ],
-    });
+    let framework = 'react';
+
+    if (baseFramework === 'astro') {
+      framework = await select({
+        message: 'Select a framework',
+        choices: [
+          {
+            name: 'Preact',
+            value: 'preact',
+          },
+          {
+            name: 'React',
+            value: 'react',
+          },
+          {
+            name: 'Solid',
+            value: 'solid',
+          },
+          {
+            name: 'Svelte',
+            value: 'svelte',
+          },
+          {
+            name: 'Vue',
+            value: 'vue',
+          },
+        ],
+      });
+    }
 
     const orm = await select({
       message: 'Select an ORM',
@@ -98,9 +117,8 @@ export const cli = async () => {
       ],
     });
 
-    const database = await select({
-      message: 'Select a database',
-      choices: [
+    const databases: Record<string, { name: string; value: string }[]> = {
+      drizzle: [
         {
           name: 'MySQL',
           value: 'mysql',
@@ -113,15 +131,68 @@ export const cli = async () => {
           name: 'PostgreSQL',
           value: 'postgresql',
         },
+        {
+          name: 'SQLite',
+          value: 'sqlite',
+        },
+        {
+          name: 'Turso',
+          value: 'turso',
+        },
       ],
+      prisma: [
+        {
+          name: 'MySQL',
+          value: 'mysql',
+        },
+        {
+          name: 'PostgreSQL',
+          value: 'postgresql',
+        },
+        {
+          name: 'SQLite',
+          value: 'sqlite',
+        },
+      ],
+    };
+
+    const database = await select({
+      message: 'Select a database',
+      choices: databases[orm]!,
     });
 
     const auth = await select({
       message: 'Select an auth provider',
       choices: [
         {
+          name: 'Clerk',
+          value: 'clerk',
+        },
+        {
           name: 'Lucia',
           value: 'lucia',
+        },
+        {
+          name: 'Supabase',
+          value: 'supabase',
+        },
+      ],
+    });
+
+    const deploy = await select({
+      message: 'Select deployment provider',
+      choices: [
+        {
+          name: 'Netlify',
+          value: 'netlify',
+        },
+        {
+          name: 'Vercel',
+          value: 'vercel',
+        },
+        {
+          name: 'None',
+          value: 'node',
         },
       ],
     });
@@ -132,24 +203,22 @@ export const cli = async () => {
       orm,
       database,
       auth,
+      deploy,
     };
 
-    // dev
-    // const choices = {
-    //   baseFramework,
-    //   framework: 'react',
-    //   orm: 'prisma',
-    //   database: 'mysql',
-    //   auth: 'lucia',
-    // };
-
     const spinner = ora('Downloading kit...').start();
+
+    const timeout = setTimeout(() => {
+      exit();
+    }, 5000);
 
     await downloadFile({
       token,
       data: choices,
       outputPath: toZip,
     });
+
+    clearTimeout(timeout);
 
     await deleteDir(to);
     spinner.text = 'Extracting kit...';

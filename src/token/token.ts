@@ -5,6 +5,8 @@ import keytar from 'keytar';
 import { getApiUrl } from '~/api';
 import { exit, getOra } from '~/utils';
 
+const key = process.env.SHIPKIT_TOKEN_KEY ?? 'shipkit';
+
 export const isValidToken = async (token: string | null) => {
   if (!token) return false;
 
@@ -45,17 +47,17 @@ export const requestToken = async () => {
 };
 
 export const setToken = async (token: string) => {
-  await keytar.setPassword('shipkit', 'token', token);
+  await keytar.setPassword(key, 'token', token);
 };
 
 export const getToken = async () => {
-  const token = await keytar.getPassword('shipkit', 'token');
+  const token = await keytar.getPassword(key, 'token');
 
   return token;
 };
 
 export const removeToken = async () => {
-  const result = await keytar.deletePassword('shipkit', 'token');
+  const result = await keytar.deletePassword(key, 'token');
 
   return result;
 };
