@@ -1,10 +1,9 @@
-import { select } from '@inquirer/prompts';
+import { confirm, select } from '@inquirer/prompts';
 import axios from 'axios';
 import 'dotenv/config';
-import { createReadStream, createWriteStream, ensureDir } from 'fs-extra';
+import { createWriteStream } from 'fs-extra';
 import { exec } from 'node:child_process';
-import unzipper from 'unzipper';
-import { deleteDir, deleteFile } from '~/file';
+import { deleteDir, deleteFile, unzipFile } from '~/file';
 
 const baseUrl = process.env.SHIPKIT_BASE_URL ?? 'https://shipkit.app';
 
@@ -107,25 +106,28 @@ export const start = async () => {
     };
 
     const url = `${baseUrl}/api/build`;
+    const to = '../temp-output-user/output';
+    const toZip = `${to}.zip`;
 
     await downloadFile({
       url,
       token: '394965bd_cad7_4c47_af78_5ae9126f3333',
       data: choices,
-      outputPath: '../output.zip',
+      outputPath: toZip,
     });
 
-    await deleteDir('../output');
-    await unzipFile('../output.zip', '../output');
+    await deleteDir(to);
+    await unzipFile(toZip, to);
+    await deleteFile(toZip);
 
-    await deleteFile('../output.zip');
+    const shouldInstall = await confirm({ message: 'Install dependencies?' });
 
-    await install({
-      path: '../output',
-      manager,
-    });
-
-    console.log('DONE');
+    if (shouldInstall) {
+      await install({
+        path: to,
+        manager,
+      });
+    }
   } catch (error: any) {}
 };
 
@@ -160,20 +162,6 @@ async function downloadFile({
   });
 }
 
-export const unzipFile = async (
-  zipFilePath: string,
-  outputDir: string
-): Promise<void> => {
-  await ensureDir(outputDir);
-
-  return new Promise((resolve, reject) => {
-    createReadStream(zipFilePath)
-      .pipe(unzipper.Extract({ path: outputDir }))
-      .on('close', resolve)
-      .on('error', reject);
-  });
-};
-
 export const install = async ({
   path,
   manager,
@@ -189,13 +177,16 @@ export const install = async ({
   };
 
   return new Promise<void>((resolve, reject) => {
-    const child = exec(`cd ${path} && ${managers[manager]}`, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
+    const child = exec(
+      `echo "Installing dependencies with ${manager}" && cd ${path} && ${managers[manager]}`,
+      (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
       }
-    });
+    );
 
     child.stdout?.on('data', (data) => {
       console.log(data);

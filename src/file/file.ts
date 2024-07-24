@@ -1,5 +1,6 @@
+import AdmZip from 'adm-zip';
 import axios from 'axios';
-import { createWriteStream, readFileSync } from 'fs';
+import { createWriteStream, readFileSync } from 'fs-extra';
 import {
   cp,
   mkdir,
@@ -94,4 +95,17 @@ export const copy = async (from: string, to: string) => {
   await cp(from, to, {
     recursive: true,
   });
+};
+
+export const unzipFile = async (
+  zipFilePath: string,
+  outputDir: string
+): Promise<void> => {
+  try {
+    const zip = new AdmZip(zipFilePath);
+
+    zip.extractAllTo(outputDir, true);
+  } catch (error) {
+    throw new Error('Failed to unzip file');
+  }
 };
