@@ -4,7 +4,6 @@ import { color } from 'console-log-colors';
 import 'dotenv/config';
 import { createWriteStream } from 'fs-extra';
 import { exec } from 'node:child_process';
-import ora from 'ora';
 import { deleteDir, deleteFile, pathExists, unzipFile } from '~/file';
 import { exit } from '~/utils';
 
@@ -12,6 +11,8 @@ const baseUrl = process.env.SHIPKIT_BASE_URL ?? 'https://shipkit.app';
 const outputDir = process.env.SHIPKIT_OUTPUT_DIR ?? '.';
 
 export const cli = async () => {
+  const ora = (await import('ora')).default;
+
   welcome();
 
   try {

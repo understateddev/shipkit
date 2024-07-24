@@ -1,1 +1,1 @@
-# ShipKit CLI
+# ShipKit
