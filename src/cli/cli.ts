@@ -1,4 +1,4 @@
-import { confirm, input, password, select } from '@inquirer/prompts';
+import { confirm, input, select } from '@inquirer/prompts';
 import axios from 'axios';
 import { color } from 'console-log-colors';
 import 'dotenv/config';
@@ -6,33 +6,44 @@ import { createWriteStream } from 'fs-extra';
 import { exec } from 'node:child_process';
 import { getApiUrl } from '~/api';
 import { deleteDir, deleteFile, pathExists, unzipFile } from '~/file';
-import { isValidToken } from '~/token';
-import { exit } from '~/utils';
+import {
+  getToken,
+  isValidToken,
+  removeToken,
+  requestToken,
+  setToken,
+} from '~/token';
+import { exit, getOra } from '~/utils';
 
 const outputDir = process.env.SHIPKIT_OUTPUT_DIR ?? '.';
 
 export const cli = async () => {
-  const ora = (await import('ora')).default;
+  const ora = await getOra();
 
   welcome();
 
   try {
-    const token = await password({
-      message: 'Enter your ShipKit token',
-    });
+    let token = await getToken();
 
-    const tokenSpinner = ora('Checking token...').start();
+    const isStoredTokenValid = await isValidToken(token);
 
-    const isValid = await isValidToken(token);
+    if (!isStoredTokenValid) {
+      token = await requestToken();
+    } else {
+      const useStoredToken = await confirm({
+        message: 'Use stored ShipKit token?',
+      });
 
-    tokenSpinner.stop();
+      if (!useStoredToken) {
+        token = await requestToken();
 
-    if (!isValid) {
-      console.log('');
-      console.log(color.redBright('Invalid token'));
-
-      exit();
+        await removeToken();
+      }
     }
+
+    if (!token) return;
+
+    await setToken(token);
 
     const name = await input({
       message: "What's the name of your project?",
@@ -115,28 +126,6 @@ export const cli = async () => {
       ],
     });
 
-    const manager = await select({
-      message: 'Select a package manager',
-      choices: [
-        {
-          name: 'bun',
-          value: 'bun',
-        },
-        {
-          name: 'npm',
-          value: 'npm',
-        },
-        {
-          name: 'pnpm',
-          value: 'pnpm',
-        },
-        {
-          name: 'yarn',
-          value: 'yarn',
-        },
-      ],
-    });
-
     const choices = {
       baseFramework,
       framework,
@@ -146,8 +135,6 @@ export const cli = async () => {
     };
 
     // dev
-    // const manager = 'bun';
-
     // const choices = {
     //   baseFramework,
     //   framework: 'react',
@@ -169,17 +156,7 @@ export const cli = async () => {
     await unzipFile(toZip, to);
     spinner.text = 'Cleaning kit...';
     await deleteFile(toZip);
-
     spinner.stop();
-
-    const shouldInstall = await confirm({ message: 'Install dependencies?' });
-
-    if (shouldInstall) {
-      await install({
-        path: to,
-        manager,
-      });
-    }
 
     console.log('');
     console.log(color.greenBright('Build something amazing!'));
