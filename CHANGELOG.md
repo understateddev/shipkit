@@ -1,5 +1,11 @@
 # shipkit
 
+## 0.0.4
+
+### Patch Changes
+
+- 07dcc88: Fixed running as shell
+
 ## 0.0.3
 
 ### Patch Changes
