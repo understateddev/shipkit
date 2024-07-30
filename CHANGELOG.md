@@ -1,5 +1,11 @@
 # shipkit
 
+## 0.0.10
+
+### Patch Changes
+
+- 67f7636: Updated base api url
+
 ## 0.0.9
 
 ### Patch Changes
