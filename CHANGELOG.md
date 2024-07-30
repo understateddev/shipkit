@@ -1,5 +1,11 @@
 # shipkit
 
+## 0.0.9
+
+### Patch Changes
+
+- c0833f5: Updated API url
+
 ## 0.0.8
 
 ### Patch Changes
