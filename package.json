@@ -9,7 +9,7 @@
     "shipkit": "./dist/index.js"
   },
   "scripts": {
-    "dev": "tsx dev/index.ts",
+    "dev": "clear && tsx dev/index.ts",
     "dev:watch": "tsx watch dev/index.ts",
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "lint": "tsc",

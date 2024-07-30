@@ -252,7 +252,7 @@ async function downloadFile({
     method: 'POST',
     responseType: 'stream',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'shipkit-token': token,
     },
   });
 
