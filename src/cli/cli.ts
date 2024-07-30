@@ -167,6 +167,9 @@ export const cli = async () => {
         {
           name: 'Clerk',
           value: 'clerk',
+          ...(framework !== 'react' && {
+            disabled: '(React only)',
+          }),
         },
         {
           name: 'Lucia',
@@ -183,16 +186,16 @@ export const cli = async () => {
       message: 'Select deployment provider',
       choices: [
         {
+          name: 'None',
+          value: 'node',
+        },
+        {
           name: 'Netlify',
           value: 'netlify',
         },
         {
           name: 'Vercel',
           value: 'vercel',
-        },
-        {
-          name: 'None',
-          value: 'node',
         },
       ],
     });
@@ -242,7 +245,7 @@ async function downloadFile({
   outputPath: string;
 }): Promise<void> {
   const writer = createWriteStream(outputPath);
-  const url = getApiUrl('/api/build');
+  const url = getApiUrl('/download');
   const response = await axios({
     url,
     data,

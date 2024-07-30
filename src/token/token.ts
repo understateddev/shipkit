@@ -11,7 +11,7 @@ export const isValidToken = async (token: string | null) => {
   if (!token) return false;
 
   try {
-    const url = getApiUrl('/api/token/check');
+    const url = getApiUrl('/token/check');
     const { data } = await axios.post<{ valid: boolean }>(url, {
       token,
     });
