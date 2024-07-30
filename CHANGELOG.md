@@ -1,5 +1,11 @@
 # shipkit
 
+## 0.0.11
+
+### Patch Changes
+
+- 8d09bc8: Fixed shipkit token
+
 ## 0.0.10
 
 ### Patch Changes
