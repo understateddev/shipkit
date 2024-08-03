@@ -1,5 +1,11 @@
 # shipkit
 
+## 0.0.12
+
+### Patch Changes
+
+- ad7c476: Updated output
+
 ## 0.0.11
 
 ### Patch Changes

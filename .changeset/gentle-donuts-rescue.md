@@ -1,5 +1,0 @@
----
-"shipkit": patch
----
-
-Updated output
