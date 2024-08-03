@@ -165,13 +165,6 @@ export const cli = async () => {
       message: 'Select an auth provider',
       choices: [
         {
-          name: 'Clerk',
-          value: 'clerk',
-          ...(framework !== 'react' && {
-            disabled: '(React only)',
-          }),
-        },
-        {
           name: 'Lucia',
           value: 'lucia',
         },
@@ -179,14 +172,21 @@ export const cli = async () => {
           name: 'Supabase',
           value: 'supabase',
         },
+        {
+          name: 'Clerk',
+          value: 'clerk',
+          ...(framework !== 'react' && {
+            disabled: '(React only)',
+          }),
+        },
       ],
     });
 
-    const deploy = await select({
-      message: 'Select deployment provider',
+    const output = await select({
+      message: 'Select output',
       choices: [
         {
-          name: 'None',
+          name: 'Node',
           value: 'node',
         },
         {
@@ -206,7 +206,7 @@ export const cli = async () => {
       orm,
       database,
       auth,
-      deploy,
+      output,
     };
 
     const spinner = ora('Downloading kit...').start();
