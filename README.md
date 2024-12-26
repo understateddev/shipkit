@@ -1,13 +1,5 @@
 # ShipKit
 
-## Dev
+## Getting Started
 
-```
-pnpm run dev
-```
-
-## Change
-
-```
-pnpm run changeset
-```
+[https://docs.shipkit.app/cli](https://docs.shipkit.app/cli)

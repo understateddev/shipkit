@@ -48,10 +48,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shipkitorg/shipkit.git"
+    "url": "git+https://github.com/understateddev/shipkit.git"
   },
   "bugs": {
-    "url": "https://github.com/shipkitorg/shipkit/issues"
+    "url": "https://github.com/understateddev/shipkit/issues"
   },
-  "homepage": "https://github.com/shipkitorg/shipkit"
+  "homepage": "https://github.com/understateddev/shipkit"
 }
