@@ -1,6 +1,6 @@
 {
   "name": "shipkit",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "ShipKit",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
