@@ -309,7 +309,8 @@ export const welcome = () => {
   // console.log('https://shipkit.app/docs');
   console.log('');
   // console.log(color.gray('-------------------------'));
-  console.log(color.gray('Created by: Marcel Thomas'));
+  console.log(color.gray('Created by:'));
+  console.log(color.gray('https://understated.dev'));
   console.log(color.gray('-------------------------'));
   console.log('');
 };
