@@ -14,7 +14,7 @@ import {
 } from '~/token';
 import { exit, getOra } from '~/utils';
 
-const outputDir = process.env.SHIPKIT_OUTPUT_DIR ?? '.';
+const outputDir = process.env.UNDERSTATED_OUTPUT_DIR ?? '.';
 
 export const cli = async () => {
   const ora = await getOra();
@@ -30,7 +30,7 @@ export const cli = async () => {
       token = await requestToken();
     } else {
       const useStoredToken = await confirm({
-        message: 'Use stored ShipKit token?',
+        message: 'Use stored Understated token?',
       });
 
       if (!useStoredToken) {
@@ -252,7 +252,7 @@ async function downloadFile({
     method: 'POST',
     responseType: 'stream',
     headers: {
-      'shipkit-token': token,
+      'understated-token': token,
     },
   });
 
@@ -303,10 +303,10 @@ export const install = async ({
 
 export const welcome = () => {
   console.log(color.gray('-------------------------'));
-  console.log(color.greenBright('Welcome to ShipKit!'));
+  console.log(color.greenBright('Welcome to Understated!'));
   // console.log('');
   // console.log(color.gray('Get started:'));
-  // console.log('https://shipkit.app/docs');
+  // console.log('https://understated.dev/docs');
   console.log('');
   // console.log(color.gray('-------------------------'));
   console.log(color.gray('Created by:'));

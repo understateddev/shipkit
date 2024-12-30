@@ -5,7 +5,7 @@ import keytar from 'keytar';
 import { getApiUrl } from '~/api';
 import { exit, getOra } from '~/utils';
 
-const key = process.env.SHIPKIT_TOKEN_KEY ?? 'shipkit';
+const key = process.env.UNDERSTATED_TOKEN_KEY ?? 'understated';
 
 export const isValidToken = async (token: string | null) => {
   if (!token) return false;
@@ -26,7 +26,7 @@ export const requestToken = async () => {
   const ora = await getOra();
 
   const token = await password({
-    message: 'Enter your ShipKit token',
+    message: 'Enter your Understated token',
   });
 
   const tokenSpinner = ora('Checking token...').start();

@@ -1,5 +1,5 @@
-# ShipKit
+# Understated CLI
 
 ## Getting Started
 
-[https://docs.shipkit.app/cli](https://docs.shipkit.app/cli)
+[https://docs.understated.dev/cli](https://docs.understated.dev/cli)

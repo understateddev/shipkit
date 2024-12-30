@@ -1,12 +1,12 @@
 {
-  "name": "shipkit",
-  "version": "0.0.14",
-  "description": "ShipKit",
+  "name": "@understated/cli",
+  "version": "0.0.0",
+  "description": "Understated CLI",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "bin": {
-    "shipkit": "./dist/index.js"
+    "understated": "./dist/index.js"
   },
   "scripts": {
     "dev": "clear && tsx dev/index.ts",
@@ -38,20 +38,20 @@
     "typescript": "^5.5.4"
   },
   "keywords": [
-    "shipkit",
-    "shipkit cli"
+    "understated cli",
+    "understated"
   ],
   "author": {
     "name": "Understated Dev",
-    "url": "https://shipkit.app"
+    "url": "https://understated.dev"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/understateddev/shipkit.git"
+    "url": "git+https://github.com/understateddev/understated-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/understateddev/shipkit/issues"
+    "url": "https://github.com/understateddev/understated-cli/issues"
   },
-  "homepage": "https://github.com/understateddev/shipkit"
+  "homepage": "https://github.com/understateddev/understated-cli"
 }
