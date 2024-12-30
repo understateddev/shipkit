@@ -303,7 +303,7 @@ export const install = async ({
 
 export const welcome = () => {
   console.log(color.gray('-------------------------'));
-  console.log(color.greenBright('Welcome to Understated!'));
+  console.log(color.greenBright('Welcome to Understated'));
   // console.log('');
   // console.log(color.gray('Get started:'));
   // console.log('https://understated.dev/docs');
